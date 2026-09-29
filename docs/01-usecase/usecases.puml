@@ -1,0 +1,31 @@
+@startuml
+!include ../../_style.puml
+left to right direction
+
+actor "Пользователь" as user
+actor "Клиент" as client
+actor "Курьер" as courier
+actor "Платёжный шлюз" as pay <<system>>
+
+client --|> user
+courier --|> user
+
+rectangle "Сервис доставки еды" {
+  usecase "Оформить заказ" as uc_order
+  usecase "Оплатить заказ" as uc_pay
+  usecase "Отменить заказ" as uc_cancel
+  usecase "Выплатить компенсацию" as uc_refund
+  usecase "Взять заказ в работу" as uc_assign
+  usecase "Обновить статус доставки" as uc_status
+}
+
+client -- uc_order
+client -- uc_cancel
+courier -- uc_assign
+courier -- uc_status
+
+uc_order ..> uc_pay : <<include>>
+uc_cancel <.. uc_refund : <<extend>>\n[отмена по вине сервиса]
+uc_pay -- pay
+uc_refund -- pay
+@enduml
