@@ -1,0 +1,15 @@
+@startuml
+!include ../_style.puml
+title Диаграмма коммуникации (Вариант 13)
+object "<u>:Оператор</u>" as user
+object "<u>ui : МодульСбора</u>" as ui
+object "<u>svc : СервисАнализа</u>" as svc
+object "<u>repo : ХранилищеДанных</u>" as repo
+object "<u>log : СистемаЛогирования</u>" as log
+
+user -- ui : 1: отправитьДанные(пакет) >
+ui -- svc : 2: обработать(данные) >
+svc -- repo : 2.1: сохранить(событие) >
+svc -- log : 2.2: записатьЛог() >
+svc -- ui : 3: ответ <
+@enduml

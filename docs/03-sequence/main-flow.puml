@@ -1,0 +1,22 @@
+@startuml
+!include ../_style.puml
+title ВИ-01 «Регистрация инцидента»: основной сценарий
+actor "Оператор" as user
+participant "МодульСбора" as ui
+participant "СервисАнализа" as svc
+database "БД" as db
+
+user -> ui : отправитьДанные(пакет)
+activate ui
+ui -> svc : обработать(данные)
+activate svc
+svc -> db : INSERT event
+db --> svc : id
+opt критический уровень
+  svc -> db : INSERT alert
+end
+svc --> ui : Результат обработки
+deactivate svc
+ui --> user : Уведомление об успехе
+deactivate ui
+@enduml

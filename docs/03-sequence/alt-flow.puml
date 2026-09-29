@@ -1,0 +1,32 @@
+@startuml
+!include ../_style.puml
+title ВИ-01 «Регистрация инцидента»: альтернативные сценарии
+actor "Оператор" as user
+participant "МодульСбора" as ui
+participant "СервисАнализа" as svc
+database "БД" as db
+queue "ШинаСобытий" as bus
+
+user -> ui : отправитьДанные(пакет)
+activate ui
+ui -> svc : обработать(данные)
+activate svc
+alt формат данных поврежден
+  svc --> ui : отказ: неверный формат
+else источник в черном списке
+  svc --> ui : отказ: доступ заблокирован
+else превышен лимит очереди
+  svc --> ui : отказ: перегрузка системы
+else данные корректны
+  loop для каждого параметра
+    svc -> svc : валидировать()
+  end
+  svc -> db : INSERT event
+  db --> svc : id
+  svc ->> bus : EventRegistered
+  svc --> ui : Событие зарегистрировано
+end
+deactivate svc
+ui --> user : Статус выполнения
+deactivate ui
+@enduml
