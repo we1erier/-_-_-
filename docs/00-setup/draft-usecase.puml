@@ -1,0 +1,23 @@
+@startuml
+!include ../../_style.puml
+left to right direction
+
+actor "Клиент" as client
+actor "Курьер" as courier
+actor "Платёжный шлюз" as pay <<system>>
+
+rectangle "Сервис доставки еды" {
+  usecase "Оформить заказ" as UC1
+  usecase "Оплатить заказ" as UC2
+  usecase "Назначить курьера" as UC3
+  usecase "Доставить заказ" as UC4
+  usecase "Отменить заказ" as UC5
+}
+
+client -- UC1
+client -- UC5
+UC1 ..> UC2 : <<include>>
+pay -- UC2
+courier -- UC3
+courier -- UC4
+@enduml

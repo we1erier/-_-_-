@@ -1,0 +1,11 @@
+@startuml
+!include ../../_style.puml
+
+actor "Клиент" as c
+participant "Сервис" as service
+database "БД" as db
+
+c -> service : Оформить заказ()
+service -> db : Сохранить заказ()
+service --> c : Подтверждение
+@enduml
