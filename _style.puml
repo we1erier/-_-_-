@@ -1,0 +1,28 @@
+' Общий файл стилей для диаграмм PlantUML
+skinparam monochrome false
+skinparam shadowing false
+skinparam handwritten false
+skinparam defaultFontName "Arial"
+skinparam defaultFontSize 12
+
+skinparam actor {
+    BackgroundColor #E1F5FE
+    BorderColor #0288D1
+}
+skinparam usecase {
+    BackgroundColor #F3E5F5
+    BorderColor #7B1FA2
+}
+skinparam class {
+    BackgroundColor #E8F5E9
+    BorderColor #388E3C
+    HeaderBackgroundColor #C8E6C9
+}
+skinparam package {
+    BackgroundColor #FFFDE7
+    BorderColor #FBC02D
+}
+skinparam rectangle {
+    BackgroundColor #FAFAFA
+    BorderColor #9E9E9E
+}
