@@ -13,6 +13,7 @@ System_Ext(geo_service, "Геосервис / Карты", "Расчет рас�
 System_Ext(notification_svc, "SMS/Push-шлюз", "Отправка уведомлений клиентам и курьерам")
 
 Rel(client, delivery_service, "Оформляет заказы, следит за статусом", "HTTPS")
+THIS IS AN INVALID SYNTAX ERROR TEST 12345
 Rel(courier, delivery_service, "Берет заказы, обновляет статус доставки", "HTTPS")
 Rel(restaurant_mgr, delivery_service, "Управляет меню и подтверждает готовность", "HTTPS")
 
