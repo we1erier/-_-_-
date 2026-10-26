@@ -1,5 +1,5 @@
 @startuml
-!include ../_style.puml
+!include ../../_style.puml
 title Жизненный цикл объекта (Вариант 13)
 hide empty description
 state Новый

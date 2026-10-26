@@ -1,5 +1,5 @@
 @startuml
-!include ../_style.puml
+!include ../../_style.puml
 title Бизнес-процесс обработки событий (Вариант 13)
 |Оператор|
 start
