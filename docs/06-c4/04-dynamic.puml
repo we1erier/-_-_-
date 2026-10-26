@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Dynamic>
+title Динамический вид С4: сценарий «Создание заказа и распределение курьера»
+
+Person(client, "Клиент")
+Container(client_app, "Мобильное приложение", "React Native")
+Container(api, "Backend API", "Python")
+ContainerDb(db, "Основная БД", "PostgreSQL")
+ContainerQueue(bus, "Шина событий", "RabbitMQ")
+Container(worker, "Воркер диспетчеризации", "Python")
+Person(courier, "Курьер")
+
+RelIndex(1, client, client_app, "Оформляет корзину и нажимает «Оплатить»")
+RelIndex(2, client_app, api, "POST /orders", "JSON/HTTPS")
+RelIndex(3, api, db, "Создает запись заказа со статусом 'Created'")
+RelIndex(4, api, bus, "Публикует событие OrderPaid")
+RelIndex(5, bus, worker, "Передает событие в воркер поиска курьера")
+RelIndex(6, worker, db, "Ищет свободного курьера поблизости и назначает")
+RelIndex(7, worker, courier, "Отправляет push-уведомление о новом заказе")
+@enduml

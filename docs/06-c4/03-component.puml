@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Component>
+title Уровень 3 Components: Контейнер «Backend API»
+
+Container(client_app, "Мобильное приложение", "React Native", "Клиентский интерфейс")
+ContainerDb(db, "Основная БД", "PostgreSQL", "Хранилище данных")
+ContainerQueue(bus, "Шина событий", "RabbitMQ", "Очередь сообщений")
+
+Container_Boundary(api, "Backend API") {
+    Component(order_ctrl, "OrderController", "FastAPI Router", "Эндпоинты создания и отмены заказов")
+    Component(delivery_ctrl, "DeliveryController", "FastAPI Router", "Эндпоинты назначения курьеров")
+    Component(order_svc, "OrderService", "Python Service", "Бизнес-логика жизненного цикла заказа")
+    Component(dispatch_svc, "DispatchService", "Python Service", "Логика поиска и назначения курьера")
+    Component(payment_client, "PaymentClient", "HTTPX Client", "Интеграция с платежным шлюзом")
+    Component(repo, "OrderRepository", "SQLAlchemy ORM", "Доступ к таблицам заказов и позиций")
+}
+
+Rel(client_app, order_ctrl, "POST /orders", "JSON/HTTPS")
+Rel(client_app, delivery_ctrl, "GET /orders/{id}/track", "JSON/HTTPS")
+
+Rel(order_ctrl, order_svc, "Вызывает")
+Rel(delivery_ctrl, dispatch_svc, "Вызывает")
+
+Rel(order_svc, repo, "Использует")
+Rel(order_svc, payment_client, "Проводит оплату")
+Rel(dispatch_svc, repo, "Использует")
+Rel(order_svc, bus, "Публикует OrderCreated", "AMQP")
+
+Rel(repo, db, "Читает/Пишет", "JDBC/SQL")
+
+SHOW_LEGEND()
+@enduml

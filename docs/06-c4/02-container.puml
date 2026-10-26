@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Container>
+title Уровень 2 Containers: Сервис доставки еды
+
+Person(client, "Клиент")
+Person(courier, "Курьер")
+Person(restaurant_mgr, "Менеджер ресторана")
+
+System_Boundary(delivery_service, "Сервис доставки еды") {
+    Container(client_app, "Мобильное приложение клиента", "React Native", "Каталог, корзина, оформление, трекинг заказа")
+    Container(courier_app, "Мобильное приложение курьера", "Flutter", "Получение заказов, смена статусов доставки")
+    Container(admin_panel, "Веб-панель ресторана", "React", "Управление меню, подтверждение готовности блюд")
+    Container(api, "Backend API", "Python / FastAPI", "Бизнес-логика, REST API, управление заказами")
+    Container(worker, "Воркер диспетчеризации", "Python / Celery", "Фоновый подбор курьеров, расчет таймаутов")
+    ContainerDb(db, "Основная БД", "PostgreSQL", "Хранение пользователей, заказов, меню, ресторанов")
+    ContainerQueue(bus, "Шина событий", "RabbitMQ", "Асинхронные события заказов и нотификаций")
+}
+
+System_Ext(payment_gateway, "Платежный шлюз")
+System_Ext(geo_service, "Геосервис / Карты")
+System_Ext(notification_svc, "SMS/Push-шлюз")
+
+Rel(client, client_app, "Пользуется", "HTTPS")
+Rel(courier, courier_app, "Пользуется", "HTTPS")
+Rel(restaurant_mgr, admin_panel, "Пользуется", "HTTPS")
+
+Rel(client_app, api, "Вызывает", "JSON/HTTPS")
+Rel(courier_app, api, "Вызывает", "JSON/HTTPS")
+Rel(admin_panel, api, "Вызывает", "JSON/HTTPS")
+
+Rel(api, db, "Читает и пишет", "JDBC/SQL")
+Rel(api, bus, "Публикует события", "AMQP")
+Rel(bus, worker, "Доставляет события", "AMQP")
+Rel(worker, db, "Обновляет статусы", "JDBC/SQL")
+
+Rel(api, payment_gateway, "Проводит платежи", "HTTPS")
+Rel(api, geo_service, "Запрашивает координаты", "HTTPS")
+Rel(worker, notification_svc, "Отправляет уведомления", "HTTPS")
+
+SHOW_LEGEND()
+@enduml

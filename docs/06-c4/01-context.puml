@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+title Уровень 1 System Context: Сервис доставки еды
+
+Person(client, "Клиент", "Выбирает блюда, оформляет заказ и оплачивает")
+Person(courier, "Курьер", "Принимает заказы, доставляет еду клиенту")
+Person(restaurant_mgr, "Менеджер ресторана", "Утверждает меню, отслеживает готовность заказов")
+
+System(delivery_service, "Сервис доставки еды", "Обработка заказов, биллинг, диспетчеризация и распределение курьеров")
+
+System_Ext(payment_gateway, "Платежный шлюз", "Проведение транзакций и холдирование средств")
+System_Ext(geo_service, "Геосервис / Карты", "Расчет расстояний, геокодирование и построение маршрутов")
+System_Ext(notification_svc, "SMS/Push-шлюз", "Отправка уведомлений клиентам и курьерам")
+
+Rel(client, delivery_service, "Оформляет заказы, следит за статусом", "HTTPS")
+Rel(courier, delivery_service, "Берет заказы, обновляет статус доставки", "HTTPS")
+Rel(restaurant_mgr, delivery_service, "Управляет меню и подтверждает готовность", "HTTPS")
+
+Rel(delivery_service, payment_gateway, "Проводит оплату и возвраты", "JSON/HTTPS")
+Rel(delivery_service, geo_service, "Запрашивает маршруты и координаты", "JSON/HTTPS")
+Rel(delivery_service, notification_svc, "Отправляет оповещения", "HTTPS")
+
+SHOW_LEGEND()
+@enduml
