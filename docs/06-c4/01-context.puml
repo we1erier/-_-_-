@@ -21,4 +21,3 @@ Rel(delivery_service, geo_service, "Запрашивает маршруты и �
 Rel(delivery_service, notification_svc, "Отправляет оповещения", "HTTPS")
 
 SHOW_LEGEND()
-@enduml
